@@ -4,6 +4,7 @@
 
   "tables": [
     {"name": "things",
+     "display_name_field": "name",
      "search_fields": ["name", "twitter"],
      "icon_url_field": "icon_url",
      "fields": {

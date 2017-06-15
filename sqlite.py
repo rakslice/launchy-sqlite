@@ -128,6 +128,7 @@ class LaunchySQLite(launchy.Plugin):
 
         for table_entry in self.config["tables"]:
             table_name = table_entry["name"]
+            display_name_field = table_entry.get("display_name_field")
             search_fields = table_entry["search_fields"]
             output_fields = []
             field_defs = table_entry["fields"]
@@ -138,8 +139,10 @@ class LaunchySQLite(launchy.Plugin):
                     print "field %s has no valid action; skipping" % field_name
 
             icon_url_field = table_entry.get("icon_url_field")
-            if icon_url_field:
+            if icon_url_field and icon_url_field not in output_fields:
                 output_fields.append(icon_url_field)
+            if display_name_field and display_name_field not in output_fields:
+                output_fields.append(display_name_field)
 
             output_clause = ", ".join(sqlite_escape(x) for x in output_fields)
             search_clause = " OR ".join("%s LIKE ?" % sqlite_escape(x) for x in search_fields)
@@ -157,11 +160,14 @@ class LaunchySQLite(launchy.Plugin):
                 # print "got %d rows" % len(result_rows)
                 for result_row in result_rows:
 
+                    column_pairs = zip(output_fields, result_row)
+                    column_dict = dict(column_pairs)
+
                     icon = self.getIcon()
                     # noinspection PyBroadException
                     try:
                         if icon_url_field:
-                            icon_url = result_row[-1]
+                            icon_url = column_dict[icon_url_field]
                             if icon_url:
                                 assert isinstance(icon_url, basestring)
                                 icon_filename = os.path.join(launchy.getIconsPath(), url_hash(icon_url) + ".png")
@@ -173,7 +179,7 @@ class LaunchySQLite(launchy.Plugin):
                         traceback.print_exc()
                     print "icon is " + icon
 
-                    for output_column_name, output_value in zip(output_fields, result_row):
+                    for output_column_name, output_value in column_pairs:
 
                         if not output_value:
                             continue
@@ -192,8 +198,13 @@ class LaunchySQLite(launchy.Plugin):
                         action = {"table": table_name, "field": output_column_name, "value": output_value}
                         action_json = json.dumps(action)
 
+                        if display_name_field and column_dict[display_name_field]:
+                            entry_display_text = "%s: %s (%s)" % (column_dict[display_name_field], action_name, output_value)
+                        else:
+                            entry_display_text = "%s: %s" % (output_value,  action_name)
+
                         resultsList.push_back(launchy.CatItem(action_json,
-                                                              str(output_value) + ": " + action_name,
+                                                              entry_display_text,
                                                               self.getID(), icon))
             finally:
                 c.close()
