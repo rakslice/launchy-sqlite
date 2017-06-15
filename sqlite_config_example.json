@@ -1,0 +1,17 @@
+{
+  "friendly_name": "Awesome Things",
+  "database": "c:\\Users\\somebody\\Documents\\whatever.sqlite",
+
+  "tables": [
+    {"name": "things",
+     "search_fields": ["name", "twitter"],
+     "icon_url_field": "icon_url",
+     "fields": {
+       "twitter": {
+         "action_name": "Open Twitter",
+         "action_url_pattern": "https://www.twitter.com/%s"
+       }
+     }
+     }
+  ]
+}
