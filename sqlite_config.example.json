@@ -1,5 +1,4 @@
 {
-  "friendly_name": "Awesome Things",
   "database": "c:\\Users\\somebody\\Documents\\whatever.sqlite",
 
   "tables": [

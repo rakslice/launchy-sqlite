@@ -49,7 +49,6 @@ class LaunchySQLite(launchy.Plugin):
 
         self.config = read_json(config_filename)
         self.database_filename = self.config["database"]
-        self.friendly_name = self.config["friendly_name"]
 
         self.conn = None
 
