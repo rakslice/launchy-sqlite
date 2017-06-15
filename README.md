@@ -11,7 +11,7 @@ a Launchy plugin to use records from an SQLite database
   
 - Put `sqlite.py` in your `Launchy\plugins\python` directory
 - Create the settings file `Launchy\plugins\python\sqlite_config.json` with the database and action details you want
-  - Use `sqlite_config_example.json` as an example.
+  - Use `sqlite_config.example.json` as an example.
   
 # Development
 
