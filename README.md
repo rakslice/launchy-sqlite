@@ -1,5 +1,5 @@
 # launchy-sqlite
-a Launchy plugin to use records from an SQLite database
+a Launchy plugin to search records from an SQLite database
 
 # To install
 
