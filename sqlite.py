@@ -113,7 +113,13 @@ class LaunchySQLite(launchy.Plugin):
     @staticmethod
     def do_action(field_def, field_value):
         if "action_url_pattern" in field_def:
-            url = field_def["action_url_pattern"].replace("%s", urllib.quote(field_value))
+            action_url_pattern = field_def["action_url_pattern"]
+            if action_url_pattern == "%s":
+                # For the special case where the action pattern is just the URL,
+                # don't escape it; the database value will have to be a valid URL
+                url = field_value
+            else:
+                url = action_url_pattern.replace("%s", urllib.quote(field_value))
             webbrowser.open(url)
 
     def getResults(self, inputDataList, resultsList):
