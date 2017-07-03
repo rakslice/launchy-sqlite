@@ -4,3 +4,5 @@ examples/
 sqlite_config.json
 stderr.txt
 stdout.txt
+*.pyc
+ConfigFrame.py

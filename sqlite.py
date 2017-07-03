@@ -12,6 +12,9 @@ import subprocess
 
 import sys
 
+from PyQt4 import QtGui
+import ConfigFrame
+
 
 def read_json(filename):
     with open(filename, "r") as handle:
@@ -52,6 +55,8 @@ class LaunchySQLite(launchy.Plugin):
 
         self.conn = None
 
+        self.widget = ConfigFrame.Ui_Frame()
+
     def init(self):
         self.conn = sqlite3.connect(self.database_filename)
 
@@ -65,6 +70,22 @@ class LaunchySQLite(launchy.Plugin):
         return self.icon
 
     def getLabels(self, inputDataList):
+        pass
+
+    def hasDialog(self):
+        print "hasDialog()"
+        return True
+
+    def doDialog(self, parentWidgetPtr):
+        print "doDialog()"
+        parentWidget = wrapinstance(parentWidgetPtr, QtGui.QWidget)
+
+        if self.widget:
+            self.widget.show()
+
+        return unwrapinstance(self.widget)
+
+    def endDialog(self, accept):
         pass
 
     @staticmethod
